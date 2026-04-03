@@ -1,4 +1,4 @@
-name: Build-Padavan-RT-AC85P-无插件
+name: NETGEAR-BZV
 
 on: 
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
         mkdir -p /opt/images/
     - name: Build Firmware
       env:
-        TNAME: RT-AC85P
+        TNAME: NETGEAR-BZV
         KERNEL: 3.4
       run: |
         cd /opt/rt-n56u/trunk
@@ -71,21 +71,25 @@ jobs:
         #以下选项是定义你需要的功能（y=集成,n=忽略），重新写入到.config文件
         ######################################################################
         ##内网穿透
-        #echo "CONFIG_FIRMWARE_INCLUDE_NPC=y" >> .config 
-        #echo "CONFIG_FIRMWARE_INCLUDE_ZEROTIER=y" >> .config #zerotier ~1.3M
-        #echo "CONFIG_FIRMWARE_INCLUDE_FRPC=y" >> .config  #frpc
-        #echo "CONFIG_FIRMWARE_INCLUDE_ALIDDNS=y" >> .config #aliddns
+        #echo "CONFIG_FIRMWARE_INCLUDE_NPC=n" >> .config 
+        #echo "CONFIG_FIRMWARE_INCLUDE_ZEROTIER=n" >> .config #zerotier ~1.3M
+        #echo "CONFIG_FIRMWARE_INCLUDE_FRPC=n" >> .config  #frpc
+        #echo "CONFIG_FIRMWARE_INCLUDE_ALIDDNS=n" >> .config #aliddns
         ##科学上网##
-        #echo "CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=y" >> .config
-        #echo "CONFIG_FIRMWARE_INCLUDE_V2RAY=y" >> .config
-        #echo "CONFIG_FIRMWARE_INCLUDE_XRAY=y" >> .config
-        #echo "CONFIG_FIRMWARE_INCLUDE_TROJAN=y" >> .config 
-        #echo "CONFIG_FIRMWARE_INCLUDE_SSOBFS=y" >> .config 
+        #echo "CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n" >> .config
+        #echo "CONFIG_FIRMWARE_INCLUDE_V2RAY=n" >> .config
+        #echo "CONFIG_FIRMWARE_INCLUDE_XRAY=n" >> .config
+        #echo "CONFIG_FIRMWARE_INCLUDE_TROJAN=n" >> .config 
+        #echo "CONFIG_FIRMWARE_INCLUDE_SSOBFS=n" >> .config 
         ##vpn
-        #echo  "CONFIG_FIRMWARE_INCLUDE_OPENVPN=y" >> .config
-        #echo "CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_SERVER=y" >> .config
-        #echo "CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CLIENT=y" >> .config
-        #echo "CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CMD=y" >> .config
+        #echo  "CONFIG_FIRMWARE_INCLUDE_OPENVPN=n" >> .config
+        #echo "CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_SERVER=n" >> .config
+        #echo "CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CLIENT=n" >> .config
+        #echo "CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CMD=n" >> .config
+        ##流控QOS##
+        echo "CONFIG_FIRMWARE_INCLUDE_SQM=y" >> .config #SQM QOS#CPU超频
+        echo "CONFIG_FIRMWARE_INCLUDE_OC=n" >> .config #CPU超频开关
+        echo 'CONFIG_FIRMWARE_MT7621_OC="0x362"' >> .config #此处填写对应频率的十六进制：1000Mhz=0x312 1100Mhz=0x362 1120Mhz=0x372 1200Mhz=0x3B2
 
         ###############################################################################
         ##########
