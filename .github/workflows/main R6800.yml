@@ -1,15 +1,18 @@
 name: Build Padavan
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 👇 这里已改成拉取你自己的源码仓库
       - uses: actions/checkout@v4
         with:
-          repository:https://github.com/yangliang235/Padavan-KVR2   # 👈 只改这一行
+          repository: yangliang235/Padavan-KVR2
+          ref: master
           fetch-depth: 1
 
       - name: Prepare environment
@@ -23,7 +26,7 @@ jobs:
       - name: Build Toolchain
         run: |
           cd toolchain-mipsel
-          chmod +x build_toolchain  # 增加执行权限，防止编译失败
+          chmod +x build_toolchain
           sh build_toolchain
           
       - name: Build Firmware
@@ -34,5 +37,5 @@ jobs:
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
         with:
-          name: Padavan Firmware
-          path: trunk/images/  # 这个路径不用改
+          name: Padavan-Firmware
+          path: trunk/images/
