@@ -6,7 +6,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 👇 这里已改成拉取你自己的源码仓库
       - uses: actions/checkout@v4
+        with:
+          repository:https://github.com/yangliang235/Padavan-KVR2   # 👈 只改这一行
+          fetch-depth: 1
+
       - name: Prepare environment
         run: |
           sudo apt update
@@ -18,15 +23,16 @@ jobs:
       - name: Build Toolchain
         run: |
           cd toolchain-mipsel
+          chmod +x build_toolchain  # 增加执行权限，防止编译失败
           sh build_toolchain
           
       - name: Build Firmware
         run: |
           cd trunk
           fakeroot ./build_firmware_ci NETGEAR-BZV
-
+          
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
         with:
           name: Padavan Firmware
-          path: trunk/images/
+          path: trunk/images/  # 这个路径不用改
