@@ -23,7 +23,7 @@ jobs:
       - name: Build Firmware
         run: |
           cd trunk
-          fakeroot ./build_firmware_ci NETGEAR-BZV
+          fakeroot ./build_firmware_ci PSG1218
 
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
