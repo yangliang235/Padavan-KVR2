@@ -1,7 +1,7 @@
 name: Build Padavan
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
   build:
@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: yangliang235/Padavan-KVR2
-          ref: main  # 👈 这里改成 main 就好了！
+          ref: main
           fetch-depth: 1
 
       - name: Prepare environment
@@ -20,13 +20,28 @@ jobs:
             fakeroot kmod cpio git python3-docutils gettext automake autopoint \
             texinfo build-essential help2man pkg-config zlib1g-dev libgmp3-dev \
             libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget libc-dev-bin
-      
+
+      - name: Fix libtool version mismatch 🔥【修复编译报错关键】
+        run: |
+          cd trunk/libs/libsqlite/sqlite-3390400
+          autoreconf -fiv
+          libtoolize --force
+          aclocal
+          autoconf
+          automake --add-missing
+          
       - name: Build Toolchain
         run: |
           cd toolchain-mipsel
           chmod +x build_toolchain
           sh build_toolchain
-          
+
+      - name: Set CPU Overclock
+        run: |
+          cd trunk
+          echo "CONFIG_FIRMWARE_INCLUDE_OC=y" >> .config
+          echo 'CONFIG_FIRMWARE_MT7621_OC="0x362"' >> .config
+
       - name: Build Firmware
         run: |
           cd trunk
@@ -35,5 +50,5 @@ jobs:
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
         with:
-          name: Padavan Firmware
+          name: Padavan-Firmware
           path: trunk/images/
